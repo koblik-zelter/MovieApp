@@ -1,0 +1,6 @@
+framework module Pods_CinemaApp {
+  umbrella header "Pods-CinemaApp-umbrella.h"
+
+  export *
+  module * { export * }
+}

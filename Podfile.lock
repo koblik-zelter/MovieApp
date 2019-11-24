@@ -1,0 +1,87 @@
+PODS:
+  - Alamofire (4.9.1)
+  - FloatingPanel (1.7.0)
+  - JXBottomSheetView (0.0.6)
+  - Kingfisher (5.9.0):
+    - Kingfisher/Core (= 5.9.0)
+  - Kingfisher/Core (5.9.0)
+  - MaterialComponents/AnimationTiming (94.2.0)
+  - MaterialComponents/Chips (94.2.0):
+    - MaterialComponents/Elevation
+    - MaterialComponents/Ink
+    - MaterialComponents/private/Math
+    - MaterialComponents/Ripple
+    - MaterialComponents/ShadowElevations
+    - MaterialComponents/ShadowLayer
+    - MaterialComponents/ShapeLibrary
+    - MaterialComponents/Shapes
+    - MaterialComponents/TextFields
+    - MaterialComponents/Typography
+    - MDFInternationalization
+  - MaterialComponents/Elevation (94.2.0):
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/Ink (94.2.0):
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/Palettes (94.2.0)
+  - MaterialComponents/private/Application (94.2.0)
+  - MaterialComponents/private/Color (94.2.0)
+  - MaterialComponents/private/Math (94.2.0)
+  - MaterialComponents/Ripple (94.2.0):
+    - MaterialComponents/AnimationTiming
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+  - MaterialComponents/ShadowElevations (94.2.0)
+  - MaterialComponents/ShadowLayer (94.2.0):
+    - MaterialComponents/ShadowElevations
+  - MaterialComponents/ShapeLibrary (94.2.0):
+    - MaterialComponents/private/Math
+    - MaterialComponents/Shapes
+  - MaterialComponents/Shapes (94.2.0):
+    - MaterialComponents/private/Color
+    - MaterialComponents/private/Math
+    - MaterialComponents/ShadowLayer
+  - MaterialComponents/TextFields (94.2.0):
+    - MaterialComponents/AnimationTiming
+    - MaterialComponents/Elevation
+    - MaterialComponents/Palettes
+    - MaterialComponents/private/Math
+    - MaterialComponents/Typography
+    - MDFInternationalization
+  - MaterialComponents/Typography (94.2.0):
+    - MaterialComponents/private/Application
+    - MaterialComponents/private/Math
+  - MDFInternationalization (2.0.0)
+  - PullableSheet (0.1.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - FloatingPanel
+  - JXBottomSheetView
+  - Kingfisher
+  - MaterialComponents/Chips
+  - PullableSheet
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - FloatingPanel
+    - JXBottomSheetView
+    - Kingfisher
+    - MaterialComponents
+    - MDFInternationalization
+    - PullableSheet
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  FloatingPanel: f686602da8eff56375e577f19be37348a95f4e24
+  JXBottomSheetView: 7b9009aa0b09a8fae9bb7786b99d3e86ed1317fb
+  Kingfisher: ff98240aebb7302bdc4f1ecd701761030ce18b16
+  MaterialComponents: ddaf6964e9bc429fc228fa46344e406c976cd85c
+  MDFInternationalization: 010097556d6b09d2c4ea38e0820ea6d37be6a314
+  PullableSheet: fbe75b796cb3ca31808fffc3e63418dc7d4c57e2
+
+PODFILE CHECKSUM: c912b4d1068a40d152365ab8097d4e8edb404c17
+
+COCOAPODS: 1.8.3
