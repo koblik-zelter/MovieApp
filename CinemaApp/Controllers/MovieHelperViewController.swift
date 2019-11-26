@@ -11,16 +11,7 @@ import MaterialComponents
 import Kingfisher
 
 class MovieHelperViewController: UIViewController {
-    let scrollView = UIScrollView()
-//    let contentView: UIView = {
-//        let view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.clipsToBounds = true
-//        view.layer.cornerRadius = 12
-//        view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-//        view.backgroundColor = .white
-//        return view
-//    }()
+
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -29,7 +20,6 @@ class MovieHelperViewController: UIViewController {
         label.textColor = .black
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-           //  label.textAlignment = .center
         return label
     }()
     
@@ -41,7 +31,6 @@ class MovieHelperViewController: UIViewController {
         label.textColor = .lightGray
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-           //  label.textAlignment = .center
         return label
     }()
     
@@ -53,7 +42,6 @@ class MovieHelperViewController: UIViewController {
         label.textColor = .black
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-           //  label.textAlignment = .center
         return label
     }()
            
@@ -66,11 +54,9 @@ class MovieHelperViewController: UIViewController {
         view.setBackgroundColor(.rgbColor(red: 194, green: 194, blue: 194, alpha: 1), for: .normal)
         view.setBackgroundColor(.rgbColor(red: 194, green: 194, blue: 194, alpha: 1), for: .selected)
         view.setInkColor(.clear, for: .normal)
-        //   view.titleLabel.textColor = .white
         view.setTitleColor(.white, for: .normal)
         view.setTitleColor(.white, for: .selected)
         view.titleLabel.text = "92%"
-            // view.isEnabled = false
         return view
     }()
     
@@ -101,24 +87,23 @@ class MovieHelperViewController: UIViewController {
             let rating = Int(round((movie.rating ?? 0) * 10))
             ratingView.titleLabel.text = "\(rating)%"
             titleLabel.text = movie.title
-            yearLabel.text = movie.date
+            yearLabel.text = String(movie.date.prefix(4))
             descriptionLabel.text = movie.overview
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-      //  self.setupViews()
         self.setupContentView()
         // Do any additional setup after loading the view.
     }
     
     
     fileprivate func setupContentView() {
-        self.view.addSubview(titleLabel)
-        self.view.addSubview(ratingView)
-        self.view.addSubview(yearLabel)
-        self.view.addSubview(descriptionLabel)
-        self.view.addSubview(reviewButton)
+        let views = [titleLabel, ratingView, yearLabel, descriptionLabel, reviewButton]
+        views.forEach { (view) in
+            self.view.addSubview(view)
+        }
+        
         titleLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 32).isActive = true
         
@@ -132,14 +117,11 @@ class MovieHelperViewController: UIViewController {
         descriptionLabel.topAnchor.constraint(equalTo: yearLabel.bottomAnchor, constant: 8).isActive = true
         descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
         descriptionLabel.trailingAnchor.constraint(equalTo: ratingView.trailingAnchor).isActive = true
-        //descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         reviewButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16).isActive = true
         reviewButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         reviewButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
         reviewButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        //reviewButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -64).isActive = true
         
-        //scrollView.sizeToFit()
     }
     /*
     // MARK: - Navigation

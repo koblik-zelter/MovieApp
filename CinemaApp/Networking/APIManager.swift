@@ -16,59 +16,76 @@ class APIManager {
     
     // TO DO ENUM FOR SORTING RESULTS
     
-    func discoverBestMovies(page: Int, handler: @escaping([Movie]) -> Void) {
-        //let testPage = 1
+    func discoverBestMovies(page: Int, handler: @escaping([Movie]?, Error?) -> Void) {
         let parameters: Parameters = ["api_key": getApiKey(), "sort_by": "popularity.desc", "iclude_adult": false, "include_video": false, "page": page, "language": "en-US", "primary_release_year": 2019]
-//        if let category = category {
-//            parameters["with_genres"] = category.id
-//        }
+
         Alamofire.request("\(url)discover/movie?", method: .get, parameters: parameters).responseJSON { (response) in
             print(response)
-            if let data = response.data {
-                let result = try? JSONDecoder().decode(Result.self, from: data)
-                guard let movies = result?.results else { return }
-                handler(movies)
+            do {
+                if let data = response.data {
+                    let result = try JSONDecoder().decode(Result.self, from: data)
+                    let movies = result.results
+                    handler(movies, nil)
+                }
             }
+            catch {
+                handler(nil, error)
+                print("Fail to load best movies")
+            }
+            
         }
     }
     
-    func discoverMoviesByCategory(page: Int, category: Category, handler: @escaping([Movie]) -> Void) {
+    func discoverMoviesByCategory(page: Int, category: Category, handler: @escaping([Movie]?, Error?) -> Void) {
         let parameters: Parameters = ["api_key": getApiKey(), "sort_by": "popularity.desc", "iclude_adult": false, "include_video": false, "page": page, "language": "en-US", "primary_release_year": 2019, "with_genres": category.id]
         Alamofire.request("\(url)discover/movie?", method: .get, parameters: parameters).responseJSON { (response) in
             print(response)
-            if let data = response.data {
-                let result = try? JSONDecoder().decode(Result.self, from: data)
-                guard let movies = result?.results else { return }
-                handler(movies)
+            do {
+                if let data = response.data {
+                    let result = try JSONDecoder().decode(Result.self, from: data)
+                    let movies = result.results
+                    handler(movies, nil)
+                }
+            }
+            catch {
+                handler(nil, error)
+                print("Fail")
             }
         }
     }
     
-    func getGenres(handler: @escaping([Category]) -> Void) {
+    func getGenres(handler: @escaping([Category]?, Error?) -> Void) {
         let parameters: Parameters = ["api_key": getApiKey(), "language": "en-US"]
         Alamofire.request("\(url)genre/movie/list?", method: .get, parameters: parameters).responseJSON { (response) in
             print(response)
             if let data = response.data {
                 do {
                     let categories = try JSONDecoder().decode(Test.self, from: data)
-                    handler(categories.genres)
+                    handler(categories.genres, nil)
                 }
                 catch {
+                    handler(nil, error)
                     print("FAIL TO GET GENRES")
                 }
             }
         }
     }
     
-    func searchMovies(_ query: String, page: Int, handler: @escaping([Movie]) -> Void) {
+    func searchMovies(_ query: String, page: Int, handler: @escaping([Movie]?, Error?) -> Void) {
         let parameters: Parameters = ["api_key": getApiKey(), "language": "en_US", "query": query, "page": page, "include_adult": false]
         
         Alamofire.request("\(url)search/movie?", method: .get, parameters: parameters).responseJSON { (response) in
             print(response)
-            if let data = response.data {
-                let result = try? JSONDecoder().decode(Result.self, from: data)
-                guard let movies = result?.results else { return }
-                handler(movies)
+            do {
+                if let data = response.data {
+                    let result = try JSONDecoder().decode(Result.self, from: data)
+                    let movies = result.results
+                    handler(movies, nil)
+                }
+            }
+            catch {
+                handler(nil, error)
+                print("Fail")
             }
         }
     }

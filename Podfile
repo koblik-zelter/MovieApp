@@ -9,8 +9,6 @@ target 'CinemaApp' do
 	pod 'MaterialComponents/Chips'
   pod 'Alamofire'
   pod 'Kingfisher'
-  pod 'PullableSheet'
- pod 'JXBottomSheetView'
 pod 'FloatingPanel'
 
 

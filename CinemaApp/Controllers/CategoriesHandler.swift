@@ -13,6 +13,7 @@ import MaterialComponents
 class CategoriesHandler: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     var delegate: FilterDelegate?
+    var sortDelegate: SortProtocol?
     
     var categories: [Category] = []
     
@@ -20,7 +21,7 @@ class CategoriesHandler: NSObject, UICollectionViewDelegate, UICollectionViewDat
         self.categories.removeAll()
         self.categories.append(contentsOf: categories)
     }
-    //let categories = ["filter", "Drama", "Comedy", "Action", "Fantasy", "Historical", "Horror", "Mystery", "Drama", "Comedy", "Action", "Fantasy", "Historical", "Horror", "Mystery", "Drama", "Comedy", "Action", "Fantasy", "Historical", "Horror", "Mystery"]
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categories.count
     }
@@ -31,13 +32,11 @@ class CategoriesHandler: NSObject, UICollectionViewDelegate, UICollectionViewDat
         cell.chipView.titleLabel.textColor = .black
         if indexPath.item == 0 {
             cell.chipView.imageView.image = UIImage(named: "slider")
-            //print(categories[indexPath.item].name)
             cell.chipView.imageView.contentMode = .center
             cell.chipView.imagePadding = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
             return cell
         }
         cell.chipView.titleLabel.text = categories[indexPath.item - 1].name
-    //    cell.chipView.titleLabel.text = categories[indexPath.item]
         return cell
     }
     
@@ -47,14 +46,12 @@ class CategoriesHandler: NSObject, UICollectionViewDelegate, UICollectionViewDat
         }
         let label = UILabel()
         label.text = categories[indexPath.item - 1].name
-//        label.text = categories[indexPath.item - 1]
         label.sizeToFit()
         let width = label.frame.width + 32
         return CGSize(width: width, height: 40)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            print("SELECTED")
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         print(indexPath.item)
         self.delegate?.didSelectCategory(categories[indexPath.item - 1])
@@ -62,6 +59,7 @@ class CategoriesHandler: NSObject, UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         if indexPath.item == 0 {
+            self.sortDelegate?.changeSortType()
             return false
         }
         return true

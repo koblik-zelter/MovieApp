@@ -11,3 +11,4 @@ import Foundation
 protocol FilterDelegate {
     func didSelectCategory(_ category: Category)
 }
+

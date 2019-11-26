@@ -15,6 +15,9 @@ let todayMovieCellId = "todayMovieCellId"
 let categoryCellId = "categoryCellId"
 class ViewController: UIViewController {
     
+    let layout = UICollectionViewFlowLayout()
+    var collectionView: UICollectionView!
+    
     let refreshControl: UIRefreshControl = {
         let rc = UIRefreshControl()
         rc.translatesAutoresizingMaskIntoConstraints = false
@@ -22,15 +25,14 @@ class ViewController: UIViewController {
         return rc
     }()
     
-    let layout = UICollectionViewFlowLayout()
-    var collectionView: UICollectionView!
-    var searchController: UISearchController!
-    let todayHandler = TodayHandler()
-    let categoriesHandler = CategoriesHandler()
-    var movies: [Movie] = []
-    var categories: [Category] = []
+    
+    private let todayHandler = TodayHandler()
+    private let categoriesHandler = CategoriesHandler()
+    private var movies: [Movie] = []
+    private var categories: [Category] = []
     private var currentType: CurrentType = .bestMoovies
     private var currentCategory: Category?
+    private var currentSortType: SortType = .popularityDesc
     private let group = DispatchGroup()
     private var page = 1 // For pagination
     
@@ -38,7 +40,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.setupViews()
-        self.setupSearchView()
         self.getCategories()
         self.fetchDataByType()
         self.fetchTodayMovies()
@@ -48,23 +49,11 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-     /*   if #available(iOS 13.0, *) {
-            let navBarAppearance = UINavigationBarAppearance()
-            navBarAppearance.configureWithOpaqueBackground()
-            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-            navBarAppearance.backgroundColor = .white
-            navigationController?.navigationBar.standardAppearance = navBarAppearance
-            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-            self.navigationItem.title = "Cinema App"
-            //self.navigationController?.navigationBar.prefersLargeTitles = true
-        }
- */
- 
         self.navigationController?.isNavigationBarHidden = true
         
     }
     
-    private func setupViews() {
+    fileprivate func setupViews() {
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .init(red: 250/255, green: 250/255, blue: 250/255, alpha: 1)
@@ -81,38 +70,32 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(MovieCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(HomeHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
-        collectionView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        
     }
     
-    private func setupSearchView() {
-        self.searchController = UISearchController(searchResultsController:  nil)
-        //searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Movies"
-       // navigationItem.searchController = searchController
-        self.searchController.obscuresBackgroundDuringPresentation = true
-        self.searchController.searchBar.barTintColor = .white
-        navigationController?.navigationBar.isTranslucent = false
-        definesPresentationContext = true
-      //  searchController.hidesNavigationBarDuringPresentation = false
-    }
-    
-    private func fetchMovies(page: Int) {
+    fileprivate func fetchMovies(page: Int) {
         self.group.enter()
-        APIManager.shared.discoverBestMovies(page: page) { (movies) in
-            self.movies.append(contentsOf: movies)
-            self.todayHandler.appendMovies(movies: self.movies)
-            self.page += 1
+        APIManager.shared.discoverBestMovies(page: page) { (movies, error) in
+            if let movies = movies {
+                let data = movies.filter { $0.path != nil && $0.rating != 0 }
+                self.movies.append(contentsOf: data)
+                self.todayHandler.appendMovies(movies: self.movies)
+                self.page += 1
+            }
+            else {
+                print(error)
+            }
             self.group.leave()
         }
     }
     
-    private func updateView() {
+    fileprivate func updateView() {
         group.notify(queue: .main, execute: {
-            let header = self.getCollectionHeader()
-            header?.moviesCollection.reloadData()
-            header?.categoriesCollection.reloadData()
+            guard let header = self.getCollectionHeader() else { return }
+            header.moviesCollection.reloadData()
+            header.categoriesCollection.reloadData()
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.refreshControl?.endRefreshing()
@@ -121,31 +104,47 @@ class ViewController: UIViewController {
     
     fileprivate func fetchMovieByCategory(category: Category, page: Int) {
         self.currentCategory = category
-        APIManager.shared.discoverMoviesByCategory(page: page, category: category) { (movies) in
-            self.currentType = .byCategories
-            self.movies.removeAll()
-            self.movies.append(contentsOf: movies)
-            self.page += 1
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+        APIManager.shared.discoverMoviesByCategory(page: page, category: category) { (movies, error)  in
+            if let movies = movies {
+                self.currentType = .byCategories
+                self.movies.removeAll()
+                let data = movies.filter { $0.path != nil && $0.rating != 0 }
+                self.movies.append(contentsOf: data)
+                self.page += 1
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+            else {
+                print(error)
             }
         }
     }
     
     fileprivate func getCategories() {
         self.group.enter()
-        APIManager.shared.getGenres { (categories) in
-            self.categories.removeAll()
-            self.categories.append(contentsOf: categories)
-            self.categoriesHandler.appendCategories(categories: self.categories)
+        APIManager.shared.getGenres { (categories, error) in
+            if let categories = categories {
+                self.categories.removeAll()
+                self.categories.append(contentsOf: categories)
+                self.categoriesHandler.appendCategories(categories: self.categories)
+            }
+            else {
+                print(error)
+            }
             self.group.leave()
         }
     }
     
     fileprivate func fetchTodayMovies() {
         self.group.enter()
-        APIManager.shared.discoverBestMovies(page: 1) { (movies) in
-            self.todayHandler.appendMovies(movies: movies)
+        APIManager.shared.discoverBestMovies(page: 1) { (movies, error) in
+            if let movies = movies {
+                self.todayHandler.appendMovies(movies: movies)
+            }
+            else {
+                print(error)
+            }
             self.group.leave()
         }
     }
@@ -203,6 +202,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
             
             header.categoriesCollection.register(MDCChipCollectionViewCell.self, forCellWithReuseIdentifier: "categoryCellId")
             categoriesHandler.delegate = self
+            categoriesHandler.sortDelegate = self
             header.categoriesCollection.delegate = categoriesHandler
             header.categoriesCollection.dataSource = categoriesHandler
             return header
@@ -238,6 +238,28 @@ extension ViewController: SearchDelegate {
     }
 }
 
+extension ViewController: SortProtocol {
+    func changeSortType() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let popAsc = UIAlertAction(title: "Popularity Asc", style: .default)
+        
+        let popDesc = UIAlertAction(title: "Popularity Desc", style: .default)
+        
+        let ratAsc = UIAlertAction(title: "Rating Asc", style: .default)
+        
+        let ratDesc = UIAlertAction(title: "Rating Desc", style: .default)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        let actions = [popDesc, popAsc, ratDesc, ratAsc, cancelAction]
+        actions.forEach { (action) in
+            alertController.addAction(action)
+        }
+        
+        self.present(alertController, animated: true)
+    }
+}
 enum CurrentType: String {
     case bestMoovies = "moovie"
     case byCategories = "categories"

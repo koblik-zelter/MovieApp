@@ -9,19 +9,18 @@
 import UIKit
 
 fileprivate let cellID = "cellID"
-fileprivate let headerID = "headerID"
 class SearchViewController: UIViewController {
 
     var searchController: UISearchController!
     let layout = UICollectionViewFlowLayout()
     var collectionView: UICollectionView!
+    
     private var movies: [Movie] = []
     private var currentPage = 1
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupCollectionView()
         self.setupSearchBar()
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +50,6 @@ class SearchViewController: UIViewController {
     fileprivate func setupSearchBar() {
         self.view.backgroundColor = .white
         self.searchController = UISearchController(searchResultsController:  nil)
-       // searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
 
@@ -79,16 +77,21 @@ class SearchViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(MovieCell.self, forCellWithReuseIdentifier: cellID)
-        //collectionView.register(HomeHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
     }
     
-    private func searchMovies(_ searchText: String) {
-        APIManager.shared.searchMovies(searchText, page: currentPage) { (movies) in
-            self.movies.removeAll()
-            self.movies.append(contentsOf: movies)
-            self.currentPage += 1
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+    fileprivate func searchMovies(_ searchText: String) {
+        APIManager.shared.searchMovies(searchText, page: currentPage) { (movies, error)  in
+            if let movies = movies {
+                self.movies.removeAll()
+                let data = movies.filter { $0.path != nil && $0.rating != 0 }
+                self.movies.append(contentsOf: data)
+                self.currentPage += 1
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+            else {
+                print(error)
             }
         }
     }
@@ -143,7 +146,6 @@ extension SearchViewController: UISearchBarDelegate {
         self.searchMovies(text.lowercased())
         searchController.isActive = false
         searchBar.text = text
-        //searchController.searchBar.endEditing(true)
     }
     
     

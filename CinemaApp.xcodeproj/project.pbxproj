@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		441D633B238B09010039AA7D /* MovieDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441D633A238B09010039AA7D /* MovieDetailsViewController.swift */; };
 		441D633F238B36860039AA7D /* MovieHelperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441D633E238B36860039AA7D /* MovieHelperViewController.swift */; };
+		445A72AF238C2FE700072981 /* SortingEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445A72AE238C2FE700072981 /* SortingEnum.swift */; };
+		445A72B1238C313000072981 /* SortProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445A72B0238C313000072981 /* SortProtocol.swift */; };
 		44C196A1238564580013219E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C196A0238564580013219E /* AppDelegate.swift */; };
 		44C196A3238564580013219E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C196A2238564580013219E /* SceneDelegate.swift */; };
 		44C196A5238564580013219E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C196A4238564580013219E /* ViewController.swift */; };
@@ -56,6 +58,8 @@
 		3C2A188DAEA46E678FA0E02E /* Pods_CinemaApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CinemaApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		441D633A238B09010039AA7D /* MovieDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsViewController.swift; sourceTree = "<group>"; };
 		441D633E238B36860039AA7D /* MovieHelperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHelperViewController.swift; sourceTree = "<group>"; };
+		445A72AE238C2FE700072981 /* SortingEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingEnum.swift; sourceTree = "<group>"; };
+		445A72B0238C313000072981 /* SortProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortProtocol.swift; sourceTree = "<group>"; };
 		44C1969D238564580013219E /* CinemaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CinemaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44C196A0238564580013219E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		44C196A2238564580013219E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -190,6 +194,7 @@
 				44C196D82385EE7D0013219E /* TodayHandler.swift */,
 				44C196DD2386E2550013219E /* CategoriesHandler.swift */,
 				44C196EF238A87430013219E /* FilterProtocol.swift */,
+				445A72B0238C313000072981 /* SortProtocol.swift */,
 				44C196F1238AAFD00013219E /* SearchDelegate.swift */,
 				44C196ED2389E3910013219E /* SearchViewController.swift */,
 				441D633A238B09010039AA7D /* MovieDetailsViewController.swift */,
@@ -220,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				44C196E82387B2260013219E /* Model.swift */,
+				445A72AE238C2FE700072981 /* SortingEnum.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -504,6 +510,7 @@
 				44C196E2238723910013219E /* RatingView.swift in Sources */,
 				44C196A1238564580013219E /* AppDelegate.swift in Sources */,
 				44C196DB2385F68A0013219E /* TodayMovieCell.swift in Sources */,
+				445A72AF238C2FE700072981 /* SortingEnum.swift in Sources */,
 				44C196A3238564580013219E /* SceneDelegate.swift in Sources */,
 				44C196EE2389E3910013219E /* SearchViewController.swift in Sources */,
 				44C196D92385EE7D0013219E /* TodayHandler.swift in Sources */,
@@ -512,6 +519,7 @@
 				44C196E4238728920013219E /* Extensions.swift in Sources */,
 				44C196D62385DF5B0013219E /* HomeHeader.swift in Sources */,
 				441D633B238B09010039AA7D /* MovieDetailsViewController.swift in Sources */,
+				445A72B1238C313000072981 /* SortProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
